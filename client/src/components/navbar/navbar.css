@@ -1,0 +1,76 @@
+.navbar {
+  display: flex;
+  background-color: #004c8e;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+.navbar h1 {
+  color: #fff;
+  font-size: 1.4rem;
+}
+
+.odinicon {
+  margin-left: 20px;
+  color: #fff;
+  font-size: 4rem;
+}
+.searchBar {
+  display: flex;
+  margin-left: auto;
+  width: 20%;
+  align-items: center;
+  color: #002342;
+  font-size: 2rem;
+  flex-wrap: nowrap;
+}
+.searchBar button {
+  height: 50px;
+  width: 15%;
+  border: none;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+.searchBar input {
+  height: 48px;
+  width: 100%;
+  border: none;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.links {
+  display: flex;
+  margin-left: auto;
+  align-items: center;
+  width: 40%;
+  justify-content: space-around;
+}
+.links a {
+  text-decoration: none;
+  color: #fff;
+  padding: 1vh;
+  border-bottom: 2px solid #004c8e;
+}
+
+.links a:visited {
+  color: #fff;
+}
+.links a:hover {
+  transition: 0.2s;
+
+  border-color: #fff;
+}
+.links button {
+  color: #004c8e;
+  background: #fff;
+  border: 0;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+@media screen and (max-width: 1000px) {
+  .navbar {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}

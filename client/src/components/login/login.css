@@ -1,0 +1,164 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10%;
+  margin-top: 10%;
+}
+@media screen and (max-width: 1000px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10%;
+    margin-top: 10%;
+  }
+}
+
+.loginForm {
+  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.5);
+  margin-top: 2%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 2%;
+  padding-bottom: 2%;
+  width: 400px;
+  gap: 10px;
+  border-radius: 20px;
+  background-color: #fff;
+}
+
+.container input {
+  outline: none;
+  border: none;
+  cursor: pointer;
+  width: 80%;
+  height: 40px;
+  border-bottom: 2px solid #cacaca;
+  background-color: #fff;
+}
+.box input {
+  width: 100%;
+}
+#icon {
+  cursor: pointer;
+}
+
+.boxhead {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-start;
+}
+.boxhead h2 {
+  margin-right: 150px;
+}
+.nameinput {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.btn-login {
+  background: #0275d8;
+  color: #fff;
+  border: 0;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 5%;
+  width: 70%;
+  font-size: large;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.btn-newaccount {
+  background: #4caf50;
+  color: #fff;
+  border: 0;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 5%;
+  width: 70%;
+  font-size: large;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+#head {
+  display: flex;
+  color: #004c8e;
+  font-size: 3rem;
+  align-items: center;
+}
+#odinicon {
+  font-size: 6rem;
+}
+
+.box {
+  width: 400px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px;
+  text-align: center;
+}
+
+.box input {
+  width: 100%;
+}
+#icon {
+  cursor: pointer;
+}
+
+.boxhead {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-start;
+}
+.boxhead h2 {
+  margin-right: 150px;
+}
+.nameinput {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  gap: 10px;
+}
+#btn-continue {
+  background: #4caf50;
+  color: #fff;
+  border: 0;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 5%;
+  width: 70%;
+  font-size: large;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+#CheckCircle {
+  font-size: 8rem;
+  color: #4caf50;
+}
+.wrongEorP {
+  display: flex;
+  color: #833636;
+  background-color: rgb(255, 231, 231);
+  width: 80%;
+  align-items: center;
+  justify-content: center;
+  height: 2rem;
+  border-radius: 5px;
+  border: 1px solid rgb(209, 169, 169);
+}
