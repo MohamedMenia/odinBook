@@ -19,10 +19,14 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get("/user", controller.userget);
+app.get("/search/:str", controller.search);
+app.get("/people/:email", controller.people);
+app.get("/allFriends", controller.allFriends);
+
 app.post("/signup", controller.creatAccountPost);
 app.post("/login", (req, res, next) => {
   passport.authenticate("user", (err, user, info) => {
-    console.log(info);
     if (err) throw err;
     if (!user) res.status(401).json(info);
     else {
@@ -33,9 +37,12 @@ app.post("/login", (req, res, next) => {
     }
   })(req, res, next);
 });
-app.get("/user", controller.userget);
-app.get("/search/:str", controller.search);
 
-app.post("/profile", upload.single("avatar"), controller.profile);
+app.post('/addFriendREQ',controller.addFriendREQ)
+app.post("/profile", upload.single("avatar"), controller.profileEdit);
+app.post('/addPost',controller.addPost)
+app.get("/GETPosts", controller.GETPosts);
+
+
 
 module.exports = app;

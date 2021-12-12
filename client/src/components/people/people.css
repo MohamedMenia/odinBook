@@ -1,0 +1,61 @@
+.peopleBody {
+    background-color: #fff;
+    width: clamp(50rem, 100vw, 50rem);
+    gap: 10px 20px;
+    padding: 10px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: max-content auto max-content;
+    grid-template-rows: auto auto;
+    word-break: break-word;
+    gap: 10px 20px;
+  }
+  #username {
+    font-size: 1.4rem;
+  }
+  #peoplePicture {
+    float: left;
+    min-width: 150px;
+    width: 15vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 3rem;
+    border-radius: 50%;
+  }
+  
+  .frindBtn button {
+    background: #dadde1;
+    color: #444950;
+    border: 0;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 5%;
+    font-size: medium;
+    display: flex;
+    align-items: flex-start;
+    margin-right: 10px;
+    margin-left: auto;
+  }
+  @media screen and (max-width: 1000px) {
+    .frindBtn button {
+      font-size: small;
+  
+    }
+  
+    
+  }
+  .peoplePostes {
+    grid-column-start: 2;
+    grid-column-end: 4;
+  }
+  
+  .peopleLinks a {
+    text-decoration: none;
+    padding: 1vh;
+    display: flex;
+    flex-direction: column;
+  }

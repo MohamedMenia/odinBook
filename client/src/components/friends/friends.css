@@ -29,7 +29,7 @@
   border: 2px solid #f2f3f5;
   border-radius: 8px;
 }
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 750px) {
   .friendBox {
     display: flex;
     font-size: medium;
@@ -51,3 +51,18 @@
   margin-left: auto;
   margin-right: 5px;
 }
+.friendBox  a {
+  text-decoration: none;
+  color: #444950;
+  border-bottom: 2px solid #fff;
+}
+
+.friendBox  a:visited {
+  color: #444950;
+}
+.friendBox  a:hover {
+  transition: 0.2s;
+
+  border-color: #444950;
+}
+

@@ -1,8 +1,22 @@
+.EditProfilbody {
+  display: flex;
+  background-color: #fff;
+  width: clamp(50rem, 100vw, 50rem);
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  flex-direction: column;
+  padding: 10px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  align-items: center;
+}
 .profileEditor {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 5px;
   background-color: #fff;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 400px;
 }
 
 .profileEditor input,
@@ -11,8 +25,8 @@ textarea {
   border: none;
   cursor: pointer;
   height: 35px;
-  background-color: #f2f3f5;
-  border-radius: 8px;
+  border: 1px solid silver;
+  width: 100%;
 }
 textarea {
   resize: none;
@@ -21,4 +35,12 @@ textarea {
 .profileEditor input:focus,
 textarea:focus {
   border: 1px solid #004c8e;
+}
+.profileEditor input {
+  margin-left: auto;
+  width: 70%;
+}
+#imginput {
+  width: 100%;
+  border: none;
 }

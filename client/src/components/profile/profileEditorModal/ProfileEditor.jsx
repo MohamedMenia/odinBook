@@ -1,54 +1,111 @@
 import "./profileEditor.css";
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 
-function ProfileEditor({ user }) {
+
+function ProfileEditor({user,reloaduser,setReloaduser }) {
   const [img, setImg] = useState([]);
-  user = user.user;
-  const handleSubmit = (e) => {
+  const [bio, setBio] = useState(user.bio);
+  const [firstname, setFirstname] = useState(user.firstname);
+  const [surename, setSurename] = useState(user.surename);
+  const [email, setEmail] = useState(user.email);
+  const [facebookURL, setFacebookURL] = useState(user.facebookURL);
+  const [twitterURL, setTwitterURL] = useState(user.twitterURL);
+  const [instgramURL, setinstgramURL] = useState(user.instgramURL);
+  const history = useHistory();
+
+  const handleSubmit = async (e) => {
+
     e.preventDefault();
     const formData = new FormData();
     formData.append("avatar", img);
-    console.log(formData.get("avatar"));
-
-    fetch(`/profile`, {
+    if (bio) formData.append("bio", bio);
+    formData.append("firstname", firstname);
+    formData.append("surename", surename);
+    formData.append("email", email);
+    if (facebookURL) formData.append("facebookURL", facebookURL);
+    if (twitterURL) formData.append("twitterURL", twitterURL);
+    if (instgramURL) formData.append("instgramURL", instgramURL);
+    
+    await fetch(`/profile`, {
       method: "post",
       credentials: "include",
       body: formData,
     });
+    setReloaduser(reloaduser+1)
+    history.push("/profile");
   };
   return (
-    <form
-      onSubmit={handleSubmit}
-      encType='multipart/form-data'
-      className='profileEditor'>
-      <img
-        width='100'
-        alt=''
-        src={`data:${user.mimeType};base64,${user.b64}`}
-      />
-      <input
-        type='file'
-        accept='.png, .jpg, .jpeg'
-        onChange={(e) => {
-          setImg(e.target.files[0]);
-        }}
-      />
-      <span>bio</span>
-      <textarea>{user.bio}</textarea>
-      <span>firstname</span>
-      <input value={user.firstname} />
-      <span>surename</span>
-      <input value={user.surename} />
-      <span>email</span>
-      <input value={user.email} />
-      <span>twitterURL</span>
-      <input value={user.twitterURL} />
-      <span>instgramURL</span>
-      <input value={user.instgramURL} />
-      <span>facebookURL</span>
-      <input value={user.facebookURL} />
-      <button type='submit'>submit</button>
-    </form>
+    <div className='EditProfilbody'>
+      <form
+        onSubmit={handleSubmit}
+        encType='multipart/form-data'
+        className='profileEditor'>
+        <img width='100' alt='' src={user.img} />
+        <input
+          id='imginput'
+          type='file'
+          accept='.png, .jpg, .jpeg'
+          onChange={(e) => {
+            setImg(e.target.files[0]);
+          }}
+        />
+        <span>firstname</span>
+        <input
+          value={firstname}
+          onChange={(e) => {
+            setFirstname(e.target.value);
+          }}
+          required
+        />
+        <span>surename</span>
+        <input
+          value={surename}
+          onChange={(e) => {
+            setSurename(e.target.value);
+          }}
+          required
+        />
+        <span>email</span>
+        <input
+          type='email'
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
+          required
+        />
+        <span>facebookURL</span>
+        <input
+          value={facebookURL}
+          onChange={(e) => {
+            setFacebookURL(e.target.value);
+          }}
+        />
+        <span>twitterURL</span>
+        <input
+          value={twitterURL}
+          onChange={(e) => {
+            setTwitterURL(e.target.value);
+          }}
+        />
+        <span>instgramURL</span>
+        <input
+          value={instgramURL}
+          onChange={(e) => {
+            setinstgramURL(e.target.value);
+          }}
+        />
+        <span>bio</span>
+        <textarea
+          onChange={(e) => {
+            setBio(e.target.value);
+          }}>
+          {bio}
+        </textarea>
+        <button type='submit'>submit</button>
+      </form>
+    </div>
   );
 }
 

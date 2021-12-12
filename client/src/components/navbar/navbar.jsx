@@ -10,7 +10,9 @@ function Navbar({ handelSearch, user }) {
 
   let history = useHistory();
 
-  let handelSubmit = () => {
+  let handelSubmit = (e) => {
+    e.preventDefault()
+
     history.push(`/search/${searchStr}`);
   };
 

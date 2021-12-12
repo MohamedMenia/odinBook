@@ -37,7 +37,7 @@ function LoginForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(user),
-        credentials: "include",
+        credentials: "include"
       });
       let result = res.status;
       console.log(result);
@@ -45,8 +45,8 @@ function LoginForm() {
         myRef.current.setCustomValidity("");
         pop(e);
         pop2(e);
-        setLoginEmail("");
-        setLoginPassword("");
+        setsignupEmail("");
+        setsignupPassword("");
         setFirstname("");
         setSurename("");
       } else {
@@ -76,6 +76,7 @@ function LoginForm() {
         let message = await res.json();
         setloginerr(message["message"]);
         setwrongEorP("flex");
+        setLoginPassword("");
       } else window.location.reload(false);
     } catch (err) {
       alert("server erorr");
@@ -116,8 +117,10 @@ function LoginForm() {
           {loginerr}
         </div>
         <input
+          autoComplete='email'
           placeholder='Email'
           type='email'
+          value={loginEmail}
           onChange={(e) => {
             setLoginEmail(e.target.value);
           }}
@@ -126,6 +129,7 @@ function LoginForm() {
         <input
           placeholder='Password'
           type='password'
+          value={loginPassword}
           onChange={(e) => {
             setLoginPassword(e.target.value);
           }}

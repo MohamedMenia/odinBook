@@ -2,8 +2,9 @@ import "./searchRes.css";
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 
-function SearchRes() {
+function SearchRes({ setPeople, user }) {
   const [result, setResult] = useState([]);
+
   let searchStr = useParams();
   useEffect(() => {
     fetch(`/search/${searchStr["str"]}`, {
@@ -18,23 +19,35 @@ function SearchRes() {
         setResult(result);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [searchStr]);
+  function getImg(data) {
+    if (data.img) {
+      const buffer = data.img.data.data;
+      let b64 = Buffer.from(buffer).toString("base64");
+      let mimeType = data.img.contentType;
+      let src = `data:${mimeType};base64,${b64}`;
+      return src;
+    } else
+      return "https://www.pasrc.org/sites/g/files/toruqf431/files/styles/freeform_750w/public/2021-03/blank-profile-picture.jpg?itok=pRjSkTf8";
+  }
 
   return (
     <div className='searchBody'>
       <h3>search</h3>
       <div className='searchBoxes'>
         {result.map((data) => {
+          let src = getImg(data);
           return (
             <div key={data.email} className='searchBox'>
-              <img
-                alt='ff'
-                src='https://www.looper.com/img/gallery/youve-been-playing-omen-in-valorant-all-wrong/intro-1589997858.jpg'
-              />
-              <Link to='./profile'>
+              <img alt='' src={src} />
+              <Link
+                to={() => {
+                  if (user.email === data.email) return "/profile";
+                  else return `/people/${data.email}`;
+                }}
+               >
                 {data.firstname} {data.surename}
               </Link>
-              <button>unfriend</button>
             </div>
           );
         })}

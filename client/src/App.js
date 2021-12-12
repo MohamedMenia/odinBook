@@ -5,6 +5,8 @@ import Home from "./components/home/home.jsx";
 function App() {
   const [user, setUser] = useState("");
   const [isPending, setIsPending] = useState(true);
+  const [reloaduser, setReloaduser] = useState(0);
+
 
   const url = "http://localhost:8000/user";
   useEffect(() => {
@@ -21,22 +23,13 @@ function App() {
           setIsPending(false);
         } else {
           setIsPending(false);
-          if (userData.img) {
-            const buffer = userData.img.data.data;
-            let b64 = Buffer.from(buffer).toString("base64");
-            let mimeType = userData.img.contentType;
-            userData["img"] = `data:${mimeType};base64,${b64}`;
-          } else
-            userData["img"] =
-              "https://www.pasrc.org/sites/g/files/toruqf431/files/styles/freeform_750w/public/2021-03/blank-profile-picture.jpg?itok=pRjSkTf8";
-
           setUser(userData);
         }
       });
-  }, [url]);
+  }, [reloaduser]);
   return (
     <div>
-      {!isPending && user && <Home user={user} setUser={setUser} />}
+      {!isPending && user && <Home user={user} reloaduser={reloaduser}setReloaduser={setReloaduser} />}
       {!isPending && !user && <LoginForm />}
     </div>
   );

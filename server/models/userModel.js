@@ -20,5 +20,5 @@ userSchema.pre("save", async function (next) {
   next();
 });
 userSchema.index({ "$**": "text" }, { match: "partial" });
-const User = mongoose.model("user", userSchema);
+const User = mongoose.model("User", userSchema);
 module.exports = User;

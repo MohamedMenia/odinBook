@@ -17,7 +17,7 @@
 .searchBar {
   display: flex;
   margin-left: auto;
-  width: 20%;
+  width: 30%;
   align-items: center;
   color: #002342;
   font-size: 2rem;
@@ -68,9 +68,15 @@
   border-radius: 8px;
   cursor: pointer;
 }
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 750px) {
   .navbar {
     display: flex;
     flex-wrap: wrap;
+  }
+  .searchBar {
+    width: 50%;
+  }
+  .links {
+    width: 100%;
   }
 }
