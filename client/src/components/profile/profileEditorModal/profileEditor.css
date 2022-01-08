@@ -44,3 +44,14 @@ textarea:focus {
   width: 100%;
   border: none;
 }
+.profileEditor button {
+  background: #dadde1;
+  color: #444950;
+  border: 0;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 2vh;
+  font-size: 1rem;
+  height: max-content;
+}

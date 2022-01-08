@@ -6,7 +6,7 @@ function SearchRes({ setPeople, user }) {
   const [result, setResult] = useState([]);
 
   let searchStr = useParams();
-  useEffect(() => {
+  useEffect(() =>{
     fetch(`/search/${searchStr["str"]}`, {
       method: "get",
       headers: { "Content-Type": "application/json" },
@@ -18,7 +18,6 @@ function SearchRes({ setPeople, user }) {
       .then((result) => {
         setResult(result);
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchStr]);
   function getImg(data) {
     if (data.img) {
@@ -40,12 +39,7 @@ function SearchRes({ setPeople, user }) {
           return (
             <div key={data.email} className='searchBox'>
               <img alt='' src={src} />
-              <Link
-                to={() => {
-                  if (user.email === data.email) return "/profile";
-                  else return `/people/${data.email}`;
-                }}
-               >
+              <Link to={`/profile/${data.email}`}>
                 {data.firstname} {data.surename}
               </Link>
             </div>

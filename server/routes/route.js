@@ -21,7 +21,7 @@ app.use(passport.session());
 
 app.get("/user", controller.userget);
 app.get("/search/:str", controller.search);
-app.get("/people/:email", controller.people);
+app.get("/profile/:email", controller.people);
 app.get("/allFriends", controller.allFriends);
 
 app.post("/signup", controller.creatAccountPost);
@@ -41,7 +41,8 @@ app.post("/login", (req, res, next) => {
 app.post('/addFriendREQ',controller.addFriendREQ)
 app.post("/profile", upload.single("avatar"), controller.profileEdit);
 app.post('/addPost',controller.addPost)
-app.get("/GETPosts", controller.GETPosts);
+app.post('/LikeAndUnlike',controller.LikeAndUnlike)
+//app.get("/GETPosts", controller.GETPosts);
 
 
 

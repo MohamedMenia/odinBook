@@ -11,7 +11,7 @@ function Navbar({ handelSearch, user }) {
   let history = useHistory();
 
   let handelSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     history.push(`/search/${searchStr}`);
   };
@@ -35,7 +35,7 @@ function Navbar({ handelSearch, user }) {
 
       <div className='links'>
         <Link to='/'>Home </Link>
-        <Link to='/profile'>
+        <Link to={`/profile/${user.email}`}>
           {user.firstname} {user.surename}
         </Link>
         <Link to='/friends'>friends </Link>

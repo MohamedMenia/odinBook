@@ -1,7 +1,7 @@
-.body {
+.friendsbody {
   display: flex;
   background-color: #fff;
-  width: clamp(50rem, 100vw, 50rem);
+  width: clamp(400px, 100vw, 700px);
   flex-wrap: wrap;
   gap: 10px 20px;
   flex-direction: column;

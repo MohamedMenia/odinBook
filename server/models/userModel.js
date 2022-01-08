@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt");
+const PostSchema=require('./postSchema.js')
 
 const userSchema = new Schema({
   _id: Schema.Types.ObjectId,
@@ -13,6 +14,7 @@ const userSchema = new Schema({
   facebookURL: { type: String },
   bio: { type: String },
   img: { data: Buffer, contentType: String },
+  posts:[PostSchema]
 });
 userSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt();

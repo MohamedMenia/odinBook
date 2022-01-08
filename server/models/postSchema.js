@@ -3,7 +3,6 @@ const Schema = mongoose.Schema;
 let User = require("./userModel.js");
 const PostSchema = Schema(
   {
-    auther: { type: Schema.Types.ObjectId, ref: "User" },
     content: String,
     comments: [
       {
@@ -20,5 +19,4 @@ const PostSchema = Schema(
   },
   { timestamps: true }
 );
-const Post = mongoose.model("Post", PostSchema);
-module.exports = Post;
+module.exports = PostSchema;

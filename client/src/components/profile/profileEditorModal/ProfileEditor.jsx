@@ -2,8 +2,7 @@ import "./profileEditor.css";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 
-
-function ProfileEditor({user,reloaduser,setReloaduser }) {
+function ProfileEditor({ user, reloaduser, setReloaduser }) {
   const [img, setImg] = useState([]);
   const [bio, setBio] = useState(user.bio);
   const [firstname, setFirstname] = useState(user.firstname);
@@ -15,7 +14,6 @@ function ProfileEditor({user,reloaduser,setReloaduser }) {
   const history = useHistory();
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
     const formData = new FormData();
     formData.append("avatar", img);
@@ -33,7 +31,7 @@ function ProfileEditor({user,reloaduser,setReloaduser }) {
       body: formData,
     });
     setReloaduser(reloaduser+1)
-    history.push("/profile");
+    history.push(`/profile/${email}`);
   };
   return (
     <div className='EditProfilbody'>
@@ -98,6 +96,7 @@ function ProfileEditor({user,reloaduser,setReloaduser }) {
         />
         <span>bio</span>
         <textarea
+          value={bio}
           onChange={(e) => {
             setBio(e.target.value);
           }}>

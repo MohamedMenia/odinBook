@@ -1,7 +1,6 @@
 let mongoose = require("mongoose");
 const User = require("../models/userModel");
 const Friends = require("../models/friendsModel");
-const Post = require("../models/postModel");
 
 module.exports.creatAccountPost = async (req, res) => {
   //console.log(req.body)
@@ -39,6 +38,7 @@ module.exports.people = async (req, res) => {
       { $and: [{ sender: req.user._id }, { receiver: result._id }] },
     ],
   });
+  //console.log(req.user._id,result._id )
   if (friend) {
     if (friend.friendStatus === "friends")
       friend = { friendStatus: "unfriend" };
@@ -88,7 +88,7 @@ module.exports.addFriendREQ = async (req, res) => {
     });
     try {
       await addFriend.save();
-      res.sendStatus(200);
+      res.json("cancel request").status(200);
     } catch (err) {
       res.sendStatus(500);
     }
@@ -103,7 +103,7 @@ module.exports.addFriendREQ = async (req, res) => {
         },
         { friendStatus: "friends" }
       );
-      res.sendStatus(200);
+      res.json("unfriend").status(200);
     } catch (err) {
       console.log(err);
       res.sendStatus(500);
@@ -116,7 +116,7 @@ module.exports.addFriendREQ = async (req, res) => {
           { $and: [{ sender: req.user._id }, { receiver: req.body.people }] },
         ],
       });
-      res.sendStatus(200);
+      res.json("Add Friend").status(200);
     } catch (err) {
       console.log(err);
       res.sendStatus(500);
@@ -162,26 +162,65 @@ module.exports.pendingFrindes = async (req, res) => {
 };
 module.exports.addPost = async (req, res) => {
   try {
-    let post = new Post({
-      auther: req.user._id,
-      content: req.body.post,
-    });
-    await post.save();
+    await User.findOneAndUpdate(
+      { _id: req.user._id },
+      { $push: { posts: { content: req.body.post } } }
+    );
     res.sendStatus(200);
   } catch (err) {
     res.sendStatus(500);
   }
 };
-module.exports.GETPosts = async (req, res) => {
-  let id = req.body.id;
-  if (id === undefined) id = req.user._id;
-  try{
-  let postes = await Post.find({ auther: id }).populate({
-    path: "auther",
-    select: "firstname surename email img",
-  }).sort({createdAt:-1});
-  res.status(200).json(postes)
-}catch(err){
-  console.log(err)
-}
+// module.exports.GETPosts = async (req, res) => {
+//   let id = req.body.id;
+//   if (id === undefined) id = req.user._id;
+//   try{
+//   let posts = await User.find({ _if: id }).populate({
+//     path: "posts",
+//   })
+//   console.log(posts)
+//   //res.status(200).json(posts)
+// }catch(err){
+//   console.log(err)
+// }
+// };
+module.exports.LikeAndUnlike = async (req, res) => {
+  try {
+    if (req.body.likeStates === "UnLike") {
+      result = await User.findOneAndUpdate(
+        { _id: req.body.PostWriterID, "posts._id": req.body.postID },
+        {
+          $pull: { "posts.$.likes": req.user.id },
+        },
+        { new: true }
+      );
+    } else {
+      result = await User.findOneAndUpdate(
+        { _id: req.body.PostWriterID, "posts._id": req.body.postID },
+        {
+          $push: { "posts.$.likes": req.user.id },
+        },
+        { new: true }
+      );
+    }
+    res.json(result.posts);
+  } catch (err) {
+    console.log(err);
+  }
 };
+module.exports.comments = async (req, res) => {
+  try {
+      result = await User.findOneAndUpdate(
+        { _id: req.body.PostWriterID, "posts._id": req.body.postID },
+        {
+          $push: { "posts.$.comments": req.user.id },
+        },
+        { new: true }
+      );
+    
+    res.json(result.posts);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
