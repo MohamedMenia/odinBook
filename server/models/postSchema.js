@@ -6,11 +6,14 @@ const PostSchema = Schema(
     content: String,
     comments: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "User",
+        autherID: {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+        },
         content: String,
       },
-    ],likes: [
+    ],
+    likes: [
       {
         type: Schema.Types.ObjectId,
         ref: "User",

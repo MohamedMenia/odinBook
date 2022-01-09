@@ -37,22 +37,37 @@ function Profile({ mainUser }) {
           return res.json();
         })
         .then((result) => {
-          setUser(result[0]);
-          setFriendStatus(result[1]);
-          setPosts(result[0].posts);
+          console.log(result)
+          setUser(result.user);
+          setFriendStatus(result.friend);
+          setPosts(result.posts);
           setIsPending(false);
         });
     }
   }, [mainUser, reqEmail]);
   let handelLikes = async (postID, PostWriterID, likeStates) => {
-    let result = await fetch(`/LikeAndUnlike`, {
+    let postsCopy=posts.map((post)=>{
+      if(post._id===postID){
+        if(likeStates==='UnLike'){
+          const index = post.likes.indexOf(mainUser._id);
+          post.likes.splice(index, 1);
+          post.likeStates='Like'
+        }
+        else{
+          post.likes.push(mainUser._id);
+          post.likeStates='UnLike'
+
+        }
+      }
+      return post;
+    })
+    setPosts(postsCopy)
+    await fetch(`/LikeAndUnlike`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ postID, PostWriterID, likeStates }),
       credentials: "include",
     });
-    result = await result.json();
-    setPosts(result);
   };
   function getimg(user) {
     if (user.img) {
@@ -127,15 +142,6 @@ function Profile({ mainUser }) {
             )}
           </div>
           {posts.map((post) => {
-            let likeColor = { color: "#444950" };
-            let likeStates = "Like";
-            for (let i = 0; i < post.likes.length; i++) {
-              if (post.likes[i] === mainUser._id) {
-                likeStates = "UnLike";
-                likeColor = { color: "#0577db" };
-                break;
-              }
-            }
             return (
               <div className='profilePosts' key={post._id}>
                 <div className='profilePostImgPublisher'>
@@ -156,9 +162,9 @@ function Profile({ mainUser }) {
                 </div>
                 <div className='likeComment'>
                   <span
-                    style={likeColor}
-                    onClick={() => handelLikes(post._id, user._id, likeStates)}>
-                    <AiOutlineLike /> &nbsp; {likeStates}
+                    style={post.likeStates==='Like'?{ color: "#444950" }:{ color: "#0577db" }}
+                    onClick={() => handelLikes(post._id, user._id, post.likeStates)}>
+                    <AiOutlineLike /> &nbsp; {post.likeStates}
                   </span>
                   <span>
                     <FaRegCommentAlt /> &nbsp; comment

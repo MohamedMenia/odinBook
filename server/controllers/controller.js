@@ -19,14 +19,36 @@ module.exports.creatAccountPost = async (req, res) => {
   }
 };
 module.exports.userget = (req, res) => {
-  const user = req.user;
-  if (user) res.json(user);
-  else res.json(404);
+  let user = req.user;
+  if (user) {
+    let posts = req.user.posts;
+    posts = posts.map((post) => {
+      let likeStates = "Like";
+      for (let i = 0; i < post.likes.length; i++) {
+        if (post.likes[i].equals(req.user._id)) {
+          likeStates = "UnLike";
+          break;
+        }
+      }
+      post = {
+        likeStates: likeStates,
+        content: post.content,
+        comments: [...post.comments],
+        likes: [...post.likes],
+        _id: post._id,
+        createdAt: post.createdAt,
+      };
+      return post;
+    });
+    user.posts=[];
+    response={user,posts}
+    res.json(response);
+  } else res.json(404);
 };
 
 module.exports.search = async (req, res) => {
   let searchStr = req.params["str"];
-  let result = await User.find({ $text: { $search: searchStr } }).limit(10);
+  let result = await User.find({ $text: { $search: searchStr } });
   res.json(result);
 };
 module.exports.people = async (req, res) => {
@@ -38,7 +60,6 @@ module.exports.people = async (req, res) => {
       { $and: [{ sender: req.user._id }, { receiver: result._id }] },
     ],
   });
-  //console.log(req.user._id,result._id )
   if (friend) {
     if (friend.friendStatus === "friends")
       friend = { friendStatus: "unfriend" };
@@ -46,7 +67,30 @@ module.exports.people = async (req, res) => {
       friend = { friendStatus: "cancel request" };
     else friend = { friendStatus: "accept request" };
   } else friend = { friendStatus: "Add Friend" };
-  res.json([result, friend]);
+  let posts = result.posts;
+  posts = posts.map((post) => {
+    let likeStates = "Like";
+    for (let i = 0; i < post.likes.length; i++) {
+      if (post.likes[i].equals(req.user._id)) {
+        likeStates = "UnLike";
+        break;
+      }
+    }
+    post = {
+      likeStates: likeStates,
+      content: post.content,
+      comments: [...post.comments],
+      likes: [...post.likes],
+      _id: post._id,
+      createdAt: post.createdAt,
+    };
+    return post;
+  });
+  result.posts = [];
+  result.password=undefined
+let response={user:result,posts,friend}
+
+  res.json(response);
 };
 
 module.exports.profileEdit = async (req, res) => {
@@ -191,36 +235,35 @@ module.exports.LikeAndUnlike = async (req, res) => {
         { _id: req.body.PostWriterID, "posts._id": req.body.postID },
         {
           $pull: { "posts.$.likes": req.user.id },
-        },
-        { new: true }
+        }
       );
     } else {
       result = await User.findOneAndUpdate(
         { _id: req.body.PostWriterID, "posts._id": req.body.postID },
         {
           $push: { "posts.$.likes": req.user.id },
-        },
-        { new: true }
+        }
       );
     }
-    res.json(result.posts);
+    res.sendStatus(200);
   } catch (err) {
     console.log(err);
   }
 };
-module.exports.comments = async (req, res) => {
+module.exports.addComment = async (req, res) => {
   try {
-      result = await User.findOneAndUpdate(
-        { _id: req.body.PostWriterID, "posts._id": req.body.postID },
-        {
-          $push: { "posts.$.comments": req.user.id },
+    result = await User.findOneAndUpdate(
+      { _id: req.body.PostWriterID, "posts._id": req.body.postID },
+      {
+        $push: {
+          "posts.$.comments": { autherID: req.user.id, content: "alo" },
         },
-        { new: true }
-      );
-    
+      },
+      { new: true }
+    );
+
     res.json(result.posts);
   } catch (err) {
     console.log(err);
   }
 };
-

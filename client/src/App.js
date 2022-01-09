@@ -23,7 +23,7 @@ function App() {
           setIsPending(false);
         } else {
           setIsPending(false);
-          setUser(userData);
+          setUser({...userData.user,posts:userData.posts});
         }
       });
   }, [reloaduser]);
