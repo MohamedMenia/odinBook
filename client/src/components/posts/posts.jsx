@@ -4,7 +4,7 @@ import { useState } from "react";
 import { AiOutlineLike, AiFillLike } from "react-icons/ai";
 import { FaRegCommentAlt } from "react-icons/fa";
 
-function Postes() {
+function Posts() {
   let [post, setPost] = useState("");
   let handelSubmitPost = async () => {
     console.log(post)
@@ -64,4 +64,4 @@ function Postes() {
   );
 }
 
-export default Postes;
+export default Posts;

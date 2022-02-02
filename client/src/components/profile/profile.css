@@ -1,9 +1,7 @@
 .profileBody {
-  background-color: #fff;
   width: clamp(400px, 100vw, 700px);
   gap: 10px 20px;
   padding: 10px;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
   white-space: pre-line;
 }
 .grid {
@@ -20,9 +18,11 @@
 }
 #profilePicture {
   min-width: 150px;
+  min-height: 150px;
   width: 15vw;
   margin-right: 1rem;
-  border-radius: 50%;
+  height: 15vw;
+  border-radius: 15px;
 }
 .frindAndEditProfileBtn {
   background: #dadde1;
@@ -63,11 +63,12 @@
   display: flex;
   align-self: center;
   background-color: #fff;
-  width: clamp(400px, 90vw, 600px);
+  width: clamp(400px, 100vw, 700px);
   flex-wrap: nowrap;
   gap: 10px 20px;
   flex-direction: column;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
 }
 .profilePosts img {
   height: 70px;
@@ -80,14 +81,42 @@
   gap: 15px;
 }
 
-#comment {
+#commentInput {
   width: 90%;
   border: none;
   border-radius: 15px;
   background-color: #ebedf0;
   height: 35px;
+  outline: none;
+  align-self: center;
+  overflow: hidden;
+}
+.comments {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
 }
 .comment {
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  margin-top: 10px;
+}
+.comment > img {
+  height: 50px;
+  width: 50px;
+  border-radius: 50px;
+}
+.comment > div {
+  margin-left: 10px;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  width: 80%;
+  background-color: #ebedf0;
+  border-radius: 15px;
+}
+.comment > div > span {
+  font-size: 0.8rem;
+}
+.comment > div > p {
+  font-size: 1rem;
 }

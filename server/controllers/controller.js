@@ -18,30 +18,42 @@ module.exports.creatAccountPost = async (req, res) => {
     res.sendStatus(400);
   }
 };
-module.exports.userget = (req, res) => {
+const handelPosts = async (user, req = user, map = {}) => {
+  if (!map.hasOwnProperty(req._id)) map[req._id] = req;
+  let postsCopy = [];
+  for (let j = 0; j < user.posts.length; j++) {
+    let post = user.posts[j];
+    for (let i = 0; i < post.comments.length; i++) {
+      if (!map.hasOwnProperty(post.comments[i].writerID))
+        map[post.comments[i].writerID] = await User.findOne({
+          _id: post.comments[i].writerID,
+        }).select("img firstname surename email");
+    }
+    let likeStates = "Like";
+    for (let i = 0; i < post.likes.length; i++) {
+      if (post.likes[i].equals(req._id)) {
+        likeStates = "UnLike";
+        break;
+      }
+    }
+    post = {
+      likeStates: likeStates,
+      content: post.content,
+      comments: post.comments,
+      likes: post.likes,
+      _id: post._id,
+      createdAt: post.createdAt,
+    };
+    postsCopy.push(post);
+  }
+  return [postsCopy, map];
+};
+module.exports.userget = async (req, res) => {
   let user = req.user;
   if (user) {
-    let posts = req.user.posts;
-    posts = posts.map((post) => {
-      let likeStates = "Like";
-      for (let i = 0; i < post.likes.length; i++) {
-        if (post.likes[i].equals(req.user._id)) {
-          likeStates = "UnLike";
-          break;
-        }
-      }
-      post = {
-        likeStates: likeStates,
-        content: post.content,
-        comments: [...post.comments],
-        likes: [...post.likes],
-        _id: post._id,
-        createdAt: post.createdAt,
-      };
-      return post;
-    });
-    user.posts=[];
-    response={user,posts}
+    let [postsCopy, map] = await handelPosts(user);
+    user.posts = [];
+    response = { user, posts: postsCopy, map: map };
     res.json(response);
   } else res.json(404);
 };
@@ -53,7 +65,9 @@ module.exports.search = async (req, res) => {
 };
 module.exports.people = async (req, res) => {
   let email = req.params["email"];
-  let result = await User.findOne({ email: email });
+  let result = await User.findOne({ email: email }).select(
+    "email img firstname surename posts"
+  );
   let friend = await Friends.findOne({
     $or: [
       { $and: [{ sender: result._id }, { receiver: req.user._id }] },
@@ -67,28 +81,9 @@ module.exports.people = async (req, res) => {
       friend = { friendStatus: "cancel request" };
     else friend = { friendStatus: "accept request" };
   } else friend = { friendStatus: "Add Friend" };
-  let posts = result.posts;
-  posts = posts.map((post) => {
-    let likeStates = "Like";
-    for (let i = 0; i < post.likes.length; i++) {
-      if (post.likes[i].equals(req.user._id)) {
-        likeStates = "UnLike";
-        break;
-      }
-    }
-    post = {
-      likeStates: likeStates,
-      content: post.content,
-      comments: [...post.comments],
-      likes: [...post.likes],
-      _id: post._id,
-      createdAt: post.createdAt,
-    };
-    return post;
-  });
+  let [posts, map] = await handelPosts(result, req.user);
   result.posts = [];
-  result.password=undefined
-let response={user:result,posts,friend}
+  let response = { user: result, posts, friend, map };
 
   res.json(response);
 };
@@ -179,7 +174,9 @@ module.exports.allFriends = async (req, res) => {
         let id = friend.sender;
         if (req.user._id.equals(id)) id = friend.receiver;
 
-        let data = await User.findOne({ _id: id });
+        let data = await User.findOne({ _id: id }).select(
+          "img firstname surename email"
+        );
         return data;
       })
     );
@@ -215,19 +212,34 @@ module.exports.addPost = async (req, res) => {
     res.sendStatus(500);
   }
 };
-// module.exports.GETPosts = async (req, res) => {
-//   let id = req.body.id;
-//   if (id === undefined) id = req.user._id;
-//   try{
-//   let posts = await User.find({ _if: id }).populate({
-//     path: "posts",
-//   })
-//   console.log(posts)
-//   //res.status(200).json(posts)
-// }catch(err){
-//   console.log(err)
-// }
-// };
+module.exports.timelinePosts = async (req, res) => {
+  try {
+    let friends = await Friends.find({
+      $or: [{ receiver: req.user._id }, { sender: req.user._id }],
+      friendStatus: "friends",
+    });
+    friends = await Promise.all(
+      friends.map(async (friend) => {
+        let id = friend.sender;
+        if (req.user._id.equals(id)) id = friend.receiver;
+        let data = await User.findOne({ _id: id }).select(
+          "img firstname surename posts email"
+        );
+        return data;
+      })
+    );
+    let posts = [];
+    let map = {};
+    for (let i = 0; i < friends.length; i++) {
+      let [postsholder, mapholder] = handelPosts(friends[i], req.user, map);
+      posts = [...posts, ...postsholder];
+      map = { ...map, ...mapholder };
+    }
+    res.status(200).json(posts, map);
+  } catch (err) {
+    console.log(err);
+  }
+};
 module.exports.LikeAndUnlike = async (req, res) => {
   try {
     if (req.body.likeStates === "UnLike") {
@@ -256,13 +268,15 @@ module.exports.addComment = async (req, res) => {
       { _id: req.body.PostWriterID, "posts._id": req.body.postID },
       {
         $push: {
-          "posts.$.comments": { autherID: req.user.id, content: "alo" },
+          "posts.$.comments": {
+            writerID: req.user.id,
+            content: req.body.comment,
+          },
         },
-      },
-      { new: true }
+      }
     );
 
-    res.json(result.posts);
+    res.sendStatus(200);
   } catch (err) {
     console.log(err);
   }

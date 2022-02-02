@@ -42,7 +42,8 @@ app.post('/addFriendREQ',controller.addFriendREQ)
 app.post("/profile", upload.single("avatar"), controller.profileEdit);
 app.post('/addPost',controller.addPost)
 app.post('/LikeAndUnlike',controller.LikeAndUnlike)
-//app.get("/GETPosts", controller.GETPosts);
+app.post('/addComment',controller.addComment)
+app.get("/timelinePosts", controller.timelinePosts);
 
 
 

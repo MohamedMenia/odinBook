@@ -11,6 +11,8 @@ function Profile({ mainUser }) {
   let [friendStatus, setFriendStatus] = useState({ friendStatus: null });
   let reqEmail = useParams();
   let [posts, setPosts] = useState([]);
+  let [map, setMap] = useState({});
+
   const [user, setUser] = useState({
     firstname: null,
     img: null,
@@ -24,6 +26,7 @@ function Profile({ mainUser }) {
   });
   useEffect(() => {
     if (reqEmail["email"] === mainUser.email) {
+      setMap(mainUser.map);
       setPosts(mainUser.posts);
       setUser(mainUser);
       setIsPending(false);
@@ -37,31 +40,30 @@ function Profile({ mainUser }) {
           return res.json();
         })
         .then((result) => {
-          console.log(result)
+          console.log(result);
           setUser(result.user);
           setFriendStatus(result.friend);
           setPosts(result.posts);
+          setMap(result.map);
           setIsPending(false);
         });
     }
   }, [mainUser, reqEmail]);
   let handelLikes = async (postID, PostWriterID, likeStates) => {
-    let postsCopy=posts.map((post)=>{
-      if(post._id===postID){
-        if(likeStates==='UnLike'){
+    let postsCopy = posts.map((post) => {
+      if (post._id === postID) {
+        if (likeStates === "UnLike") {
           const index = post.likes.indexOf(mainUser._id);
           post.likes.splice(index, 1);
-          post.likeStates='Like'
-        }
-        else{
+          post.likeStates = "Like";
+        } else {
           post.likes.push(mainUser._id);
-          post.likeStates='UnLike'
-
+          post.likeStates = "UnLike";
         }
       }
       return post;
-    })
-    setPosts(postsCopy)
+    });
+    setPosts(postsCopy);
     await fetch(`/LikeAndUnlike`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -69,12 +71,35 @@ function Profile({ mainUser }) {
       credentials: "include",
     });
   };
+  let handelComments = async (e, postID, PostWriterID) => {
+    e.preventDefault();
+    let postsCopy = posts.map((post) => {
+      if (post._id === postID) {
+        post.comments.push({
+          writerID: mainUser._id,
+          content: e.target[0].value,
+        });
+      }
+      return post;
+    });
+    setPosts(postsCopy);
+    let comment = e.target[0].value;
+    e.target[0].value = "";
+    await fetch(`/addComment`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ postID, PostWriterID, comment }),
+      credentials: "include",
+    });
+  };
   function getimg(user) {
     if (user.img) {
-      const buffer = user.img.data.data;
-      let b64 = Buffer.from(buffer).toString("base64");
-      let mimeType = user.img.contentType;
-      return `data:${mimeType};base64,${b64}`;
+      if (user.img.data) {
+        const buffer = user.img.data.data;
+        let b64 = Buffer.from(buffer).toString("base64");
+        let mimeType = user.img.contentType;
+        return `data:${mimeType};base64,${b64}`;
+      } else return user.img;
     } else
       return "https://www.pasrc.org/sites/g/files/toruqf431/files/styles/freeform_750w/public/2021-03/blank-profile-picture.jpg?itok=pRjSkTf8";
   }
@@ -107,10 +132,10 @@ function Profile({ mainUser }) {
           <div className='profileHeader'>
             <img id='profilePicture' alt='' src={getimg(user)} />
             <div>
-            <p id='username'>
-              {user.firstname} {user.surename}
-            </p>
-            <span>{user.bio}</span>
+              <p id='username'>
+                {user.firstname} {user.surename}
+              </p>
+              <span>{user.bio}</span>
             </div>
             {mainUser.email !== user.email && (
               <button className='frindAndEditProfileBtn' onClick={handelFriend}>
@@ -118,10 +143,12 @@ function Profile({ mainUser }) {
               </button>
             )}
             {mainUser.email === user.email && (
-                <button className='frindAndEditProfileBtn' onClick={handelEditProfile} >
-                  <FaEdit />
-                  Edit profile
-                </button>
+              <button
+                className='frindAndEditProfileBtn'
+                onClick={handelEditProfile}>
+                <FaEdit />
+                Edit profile
+              </button>
             )}
           </div>
           <div className='profileLinks'>
@@ -141,41 +168,64 @@ function Profile({ mainUser }) {
               </a>
             )}
           </div>
-          {posts.map((post) => {
-            return (
-              <div className='profilePosts' key={post._id}>
-                <div className='profilePostImgPublisher'>
-                  <div>
-                    <img alt='' src={getimg(user)} />
-                  </div>
-                  <div className='postsPublisherAndDate'>
-                    <span>{user.firstname + " " + user.surename}</span>
-                    <span id='postDate'>{post.createdAt}</span>
-                  </div>
+          {posts.map((post) => (
+            <div className='profilePosts' key={post._id}>
+              <div className='profilePostImgPublisher'>
+                <div>
+                  <img alt='' src={getimg(user)} />
                 </div>
-                <div className='postContent'>
-                  <span>{post.content}</span>
-                  <span id='likes'>
-                    <AiFillLike /> {post.likes.length}
-                  </span>
-                  <hr />
-                </div>
-                <div className='likeComment'>
-                  <span
-                    style={post.likeStates==='Like'?{ color: "#444950" }:{ color: "#0577db" }}
-                    onClick={() => handelLikes(post._id, user._id, post.likeStates)}>
-                    <AiOutlineLike /> &nbsp; {post.likeStates}
-                  </span>
-                  <span>
-                    <FaRegCommentAlt /> &nbsp; comment
-                  </span>
-                </div>
-                <div className='comment'>
-                  <input id='comment' placeholder='  write a comment...' />
+                <div className='postsPublisherAndDate'>
+                  <span>{user.firstname + " " + user.surename}</span>
+                  <span id='postDate'>{post.createdAt}</span>
                 </div>
               </div>
-            );
-          })}
+              <div className='postContent'>
+                <span>{post.content}</span>
+                <span id='likes'>
+                  <AiFillLike /> {post.likes.length}
+                </span>
+                <hr />
+              </div>
+              <div className='likeComment'>
+                <span
+                  style={
+                    post.likeStates === "Like"
+                      ? { color: "#444950" }
+                      : { color: "#0577db" }
+                  }
+                  onClick={() =>
+                    handelLikes(post._id, user._id, post.likeStates)
+                  }>
+                  <AiOutlineLike /> &nbsp; {post.likeStates}
+                </span>
+                <span>
+                  <FaRegCommentAlt /> &nbsp; comment
+                </span>
+              </div>
+              <form
+                className='comments'
+                onSubmit={(e) => handelComments(e, post._id, user._id)}>
+                <input
+                  id='commentInput'
+                  placeholder='  write a comment...'
+                  autoComplete='off'
+                />
+                {post.comments.map((comment) => (
+                  <div className='comment' key={comment._id}>
+                    <img alt='' src={getimg(map[comment.writerID])} />
+                    <div>
+                      <p>
+                        {map[comment.writerID].firstname +
+                          " " +
+                          map[comment.writerID].surename}
+                      </p>
+                      <span>{comment.content}</span>
+                    </div>
+                  </div>
+                ))}
+              </form>
+            </div>
+          ))}
         </div>
       )}
     </div>

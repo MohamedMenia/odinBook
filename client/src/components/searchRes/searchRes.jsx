@@ -2,11 +2,11 @@ import "./searchRes.css";
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 
-function SearchRes({ setPeople, user }) {
+function SearchRes() {
   const [result, setResult] = useState([]);
 
   let searchStr = useParams();
-  useEffect(() =>{
+  useEffect(() => {
     fetch(`/search/${searchStr["str"]}`, {
       method: "get",
       headers: { "Content-Type": "application/json" },

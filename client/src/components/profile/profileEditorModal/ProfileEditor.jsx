@@ -2,20 +2,38 @@ import "./profileEditor.css";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 
-function ProfileEditor({ user, reloaduser, setReloaduser }) {
+function ProfileEditor({ user, setUser }) {
   const [img, setImg] = useState([]);
   const [bio, setBio] = useState(user.bio);
   const [firstname, setFirstname] = useState(user.firstname);
   const [surename, setSurename] = useState(user.surename);
   const [email, setEmail] = useState(user.email);
-  const [facebookURL, setFacebookURL] = useState(user.facebookURL);
-  const [twitterURL, setTwitterURL] = useState(user.twitterURL);
-  const [instgramURL, setinstgramURL] = useState(user.instgramURL);
+  const [facebookURL, setFacebookURL] = useState(user.facebookURL||'');
+  const [twitterURL, setTwitterURL] = useState(user.twitterURL||'');
+  const [instgramURL, setinstgramURL] = useState(user.instgramURL||'');
   const history = useHistory();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
+    if (img.length!==0) {
+      let reader = new FileReader();
+      reader.readAsDataURL(img);
+      reader.onloadend =()=>{
+        setUser({...user,
+          img:reader.result
+        });
+      };
+    }
+    setUser({...user,
+      bio: bio,
+      firstname: firstname,
+      surename: surename,
+      email: email,
+      facebookURL: facebookURL,
+      twitterURL: twitterURL,
+      instgramURL: instgramURL,
+    });
     formData.append("avatar", img);
     if (bio) formData.append("bio", bio);
     formData.append("firstname", firstname);
@@ -24,14 +42,12 @@ function ProfileEditor({ user, reloaduser, setReloaduser }) {
     if (facebookURL) formData.append("facebookURL", facebookURL);
     if (twitterURL) formData.append("twitterURL", twitterURL);
     if (instgramURL) formData.append("instgramURL", instgramURL);
-    
-    await fetch(`/profile`, {
+    history.push(`/profile/${user.email}`);
+     await fetch(`/profile`, {
       method: "post",
       credentials: "include",
       body: formData,
     });
-    setReloaduser(reloaduser+1)
-    history.push(`/profile/${email}`);
   };
   return (
     <div className='EditProfilbody'>
@@ -39,7 +55,6 @@ function ProfileEditor({ user, reloaduser, setReloaduser }) {
         onSubmit={handleSubmit}
         encType='multipart/form-data'
         className='profileEditor'>
-        <img width='100' alt='' src={user.img} />
         <input
           id='imginput'
           type='file'

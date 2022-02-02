@@ -6,7 +6,7 @@ const PostSchema = Schema(
     content: String,
     comments: [
       {
-        autherID: {
+        writerID: {
           type: Schema.Types.ObjectId,
           ref: "User",
         },
