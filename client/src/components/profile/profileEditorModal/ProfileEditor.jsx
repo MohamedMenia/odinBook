@@ -19,10 +19,13 @@ function ProfileEditor({ user, setUser }) {
     if (img.length!==0) {
       let reader = new FileReader();
       reader.readAsDataURL(img);
+      let userid=user._id
       reader.onloadend =()=>{
-        setUser({...user,
+        let useroject={...user,
           img:reader.result
-        });
+        }
+        useroject.map[`${userid}`].img=reader.result
+        setUser(useroject);
       };
     }
     setUser({...user,
