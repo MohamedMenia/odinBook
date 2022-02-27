@@ -1,6 +1,7 @@
 let mongoose = require("mongoose");
 const User = require("../models/userModel");
 const Friends = require("../models/friendsModel");
+const { post } = require("../routes/route");
 
 module.exports.creatAccountPost = async (req, res) => {
   //console.log(req.body)
@@ -20,6 +21,8 @@ module.exports.creatAccountPost = async (req, res) => {
 };
 const handelPosts = async (user, req = user, map = {}) => {
   if (!map.hasOwnProperty(req._id)) map[req._id] = req;
+  if (!map.hasOwnProperty(user._id)) map[user._id] = user;
+
   let postsCopy = [];
   for (let j = 0; j < user.posts.length; j++) {
     let post = user.posts[j];
@@ -36,7 +39,9 @@ const handelPosts = async (user, req = user, map = {}) => {
         break;
       }
     }
+
     post = {
+      PostWriterID: user._id,
       likeStates: likeStates,
       content: post.content,
       comments: post.comments,
@@ -228,14 +233,16 @@ module.exports.timelinePosts = async (req, res) => {
         return data;
       })
     );
-    let posts = [];
-    let map = {};
+    let [postsholder, mapholder] = await handelPosts(req.user, req.user);
+    let posts = [...postsholder];
+    let map = { ...mapholder };
+
     for (let i = 0; i < friends.length; i++) {
-      let [postsholder, mapholder] = handelPosts(friends[i], req.user, map);
+      [postsholder, mapholder] = await handelPosts(friends[i], req.user, map);
       posts = [...posts, ...postsholder];
       map = { ...map, ...mapholder };
     }
-    res.status(200).json(posts, map);
+    res.status(200).json({ posts, map });
   } catch (err) {
     console.log(err);
   }

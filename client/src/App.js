@@ -1,6 +1,6 @@
-import Home from "./components/home/home.jsx";
+import Routing from "./components/routing/routing.jsx";
 function App() {
-  return <Home />;
+  return <Routing />;
 }
 
 export default App;

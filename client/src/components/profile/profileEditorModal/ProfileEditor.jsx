@@ -1,6 +1,6 @@
 import "./profileEditor.css";
 import { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function ProfileEditor({ user, setUser }) {
   const [img, setImg] = useState([]);
@@ -8,27 +8,26 @@ function ProfileEditor({ user, setUser }) {
   const [firstname, setFirstname] = useState(user.firstname);
   const [surename, setSurename] = useState(user.surename);
   const [email, setEmail] = useState(user.email);
-  const [facebookURL, setFacebookURL] = useState(user.facebookURL||'');
-  const [twitterURL, setTwitterURL] = useState(user.twitterURL||'');
-  const [instgramURL, setinstgramURL] = useState(user.instgramURL||'');
-  const history = useHistory();
+  const [facebookURL, setFacebookURL] = useState(user.facebookURL || "");
+  const [twitterURL, setTwitterURL] = useState(user.twitterURL || "");
+  const [instgramURL, setinstgramURL] = useState(user.instgramURL || "");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    if (img.length!==0) {
+    if (img.length !== 0) {
       let reader = new FileReader();
       reader.readAsDataURL(img);
-      let userid=user._id
-      reader.onloadend =()=>{
-        let useroject={...user,
-          img:reader.result
-        }
-        useroject.map[`${userid}`].img=reader.result
+      let userid = user._id;
+      reader.onloadend = () => {
+        let useroject = { ...user, img: reader.result };
+        useroject.map[`${userid}`].img = reader.result;
         setUser(useroject);
       };
     }
-    setUser({...user,
+    setUser({
+      ...user,
       bio: bio,
       firstname: firstname,
       surename: surename,
@@ -45,23 +44,24 @@ function ProfileEditor({ user, setUser }) {
     if (facebookURL) formData.append("facebookURL", facebookURL);
     if (twitterURL) formData.append("twitterURL", twitterURL);
     if (instgramURL) formData.append("instgramURL", instgramURL);
-    history.push(`/profile/${user.email}`);
-     await fetch(`/profile`, {
+    navigate(`/profile/${user.email}`);
+    await fetch(`/profile`, {
       method: "post",
       credentials: "include",
       body: formData,
     });
   };
   return (
-    <div className='EditProfilbody'>
+    <div className="EditProfilbody">
       <form
         onSubmit={handleSubmit}
-        encType='multipart/form-data'
-        className='profileEditor'>
+        encType="multipart/form-data"
+        className="profileEditor"
+      >
         <input
-          id='imginput'
-          type='file'
-          accept='.png, .jpg, .jpeg'
+          id="imginput"
+          type="file"
+          accept=".png, .jpg, .jpeg"
           onChange={(e) => {
             setImg(e.target.files[0]);
           }}
@@ -84,7 +84,7 @@ function ProfileEditor({ user, setUser }) {
         />
         <span>email</span>
         <input
-          type='email'
+          type="email"
           value={email}
           onChange={(e) => {
             setEmail(e.target.value);
@@ -117,10 +117,11 @@ function ProfileEditor({ user, setUser }) {
           value={bio}
           onChange={(e) => {
             setBio(e.target.value);
-          }}>
+          }}
+        >
           {bio}
         </textarea>
-        <button type='submit'>submit</button>
+        <button type="submit">submit</button>
       </form>
     </div>
   );

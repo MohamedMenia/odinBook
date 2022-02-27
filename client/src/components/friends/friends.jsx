@@ -1,19 +1,13 @@
 import "./friends.css";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import {getimg} from "../../functions/getImg" 
+
 
 function Friends() {
   let [isPending, setIsPending] = useState("true");
   let [friends, setFriends] = useState([]);
-  function getimg(user) {
-    if (user.img) {
-      const buffer = user.img.data.data;
-      let b64 = Buffer.from(buffer).toString("base64");
-      let mimeType = user.img.contentType;
-      return `data:${mimeType};base64,${b64}`;
-    } else
-      return "https://www.pasrc.org/sites/g/files/toruqf431/files/styles/freeform_750w/public/2021-03/blank-profile-picture.jpg?itok=pRjSkTf8";
-  }
+
 
   useEffect(() => {
     fetch(`/allFriends`, {

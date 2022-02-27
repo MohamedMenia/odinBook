@@ -37,7 +37,7 @@ function LoginForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(user),
-        credentials: "include"
+        credentials: "include",
       });
       let result = res.status;
       console.log(result);
@@ -107,19 +107,19 @@ function LoginForm() {
   }
 
   return (
-    <div className='container'>
-      <h1 id='head' style={blur}>
-        <BsLayoutWtf id='odinicon' />
+    <div className="container">
+      <h1 id="head" style={blur}>
+        <BsLayoutWtf id="odinicon" />
         Odinbook
       </h1>
-      <form style={blur} className='loginForm' onSubmit={handelloginsubmit}>
-        <div className='wrongEorP' style={{ display: wrongEorP }}>
+      <form style={blur} className="loginForm" onSubmit={handelloginsubmit}>
+        <div className="wrongEorP" style={{ display: wrongEorP }}>
           {loginerr}
         </div>
         <input
-          autoComplete='email'
-          placeholder='Email'
-          type='email'
+          autoComplete="email"
+          placeholder="Email"
+          type="email"
           value={loginEmail}
           onChange={(e) => {
             setLoginEmail(e.target.value);
@@ -127,35 +127,35 @@ function LoginForm() {
           required
         />
         <input
-          placeholder='Password'
-          type='password'
+          placeholder="Password"
+          type="password"
           value={loginPassword}
           onChange={(e) => {
             setLoginPassword(e.target.value);
           }}
           required
         />
-        <button className='btn-login' type='submit'>
+        <button className="btn-login" type="submit">
           Log In
         </button>
-        <button onClick={(e) => pop(e)} className='btn-newaccount'>
+        <button onClick={(e) => pop(e)} className="btn-newaccount">
           Creat new account
         </button>
       </form>
 
-      <div className='box' style={{ display: modal }}>
-        <div className='boxhead'>
-          <i id='icon' onClick={(e) => pop(e)}>
+      <div className="box" style={{ display: modal }}>
+        <div className="boxhead">
+          <i id="icon" onClick={(e) => pop(e)}>
             <FaRegWindowClose />
           </i>
           <h2>Sign Up</h2>
         </div>
         <form onSubmit={handelsignupsubmit}>
-          <div className='nameinput'>
+          <div className="nameinput">
             <input
-              id='firstnameinput'
-              placeholder='Firstname'
-              type='text'
+              id="firstnameinput"
+              placeholder="Firstname"
+              type="text"
               onChange={(e) => {
                 setFirstname(e.target.value);
               }}
@@ -163,9 +163,9 @@ function LoginForm() {
               required
             />
             <input
-              id='surename'
-              placeholder='Surename'
-              type='text'
+              id="surename"
+              placeholder="Surename"
+              type="text"
               onChange={(e) => {
                 setSurename(e.target.value);
               }}
@@ -174,8 +174,8 @@ function LoginForm() {
             />
           </div>
           <input
-            placeholder='Email'
-            type='email'
+            placeholder="Email"
+            type="email"
             onChange={(e) => {
               e.target.setCustomValidity("");
 
@@ -186,8 +186,8 @@ function LoginForm() {
             required
           />
           <input
-            placeholder='Password'
-            type='password'
+            placeholder="Password"
+            type="password"
             onChange={(e) => {
               setsignupPassword(e.target.value);
             }}
@@ -197,15 +197,15 @@ function LoginForm() {
             // title="Must contain at least one number and one uppercase and lowercase letter, and at least 6 or more characters"
           />
 
-          <button className='btn-newaccount' type='submit'>
+          <button className="btn-newaccount" type="submit">
             Sgin Up
           </button>
         </form>
       </div>
-      <div className='box' style={{ display: modal2 }}>
-        <BsCheckCircle id='CheckCircle' />
+      <div className="box" style={{ display: modal2 }}>
+        <BsCheckCircle id="CheckCircle" />
         <h3>your account has been succeessfully created</h3>
-        <button id='btn-continue' onClick={pop2}>
+        <button id="btn-continue" onClick={pop2}>
           continue
         </button>
       </div>

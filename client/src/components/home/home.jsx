@@ -1,70 +1,50 @@
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import { useState, useEffect } from "react";
 import "./home.css";
-import Navbar from "../navbar/navbar";
-import Friends from "../friends/friends";
-import SearchRes from "../searchRes/searchRes";
-import Profile from "../profile/profile.jsx";
-import ProfileEditor from "../profile/profileEditorModal/ProfileEditor";
+import { useState, useEffect } from "react";
 import Posts from "../posts/posts";
-import LoginForm from "../login/login";
-function Home() {
-  const [user, setUser] = useState("");
-  const [isPending, setIsPending] = useState(true);
+function Home({ logedUser }) {
+  let [post, setPost] = useState("");
+  let [posts, setPosts] = useState([]);
+  let [map, setMap] = useState([]);
 
-  const url = "http://localhost:8000/user";
   useEffect(() => {
-    fetch(url, {
-      method: "GET",
+    fetch("timelinePosts", {
+      method: "get",
+      headers: { "Content-Type": "application/json" },
       credentials: "include",
     })
       .then((res) => {
         return res.json();
       })
-      .then((userData) => {
-        if (userData === 404) {
-          setUser("");
-          setIsPending(false);
-        } else {
-          setIsPending(false);
-          setUser({
-            ...userData.user,
-            posts: userData.posts,
-            map: userData.map,
-          });
-        }
+      .then((result) => {
+        setMap(result.map);
+        setPosts(result.posts);
       });
   }, []);
+
+  let handelSubmitPost = async () => {
+    console.log(post);
+    await fetch(`/addPost`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ post }),
+      credentials: "include",
+    });
+  };
   return (
-    <div>
-      {!isPending && !user && <LoginForm />}
-      {!isPending && user && (
-        <Router>
-          <div className='flex'>
-            <div className='head'>
-              <Navbar user={user} />
-            </div>
-            <Route exact path='/'>
-              <Posts />
-            </Route>
-            <Route exact path='/profileEdit'>
-              <ProfileEditor
-                user={user}
-                setUser={setUser}
-              />
-            </Route>
-            <Route exact path='/friends'>
-              <Friends />
-            </Route>
-            <Route path='/search/:str'>
-              <SearchRes />
-            </Route>
-            <Route exact path='/profile/:email'>
-              <Profile mainUser={user} />
-            </Route>
-          </div>
-        </Router>
-      )}
+    <div className="HomeBody">
+      <form className="creatPost" onSubmit={handelSubmitPost}>
+        <textarea
+          placeholder="what's in your mind"
+          onChange={(e) => setPost(e.target.value)}
+        />
+        <button id="postBtn">Post</button>
+      </form>
+      <Posts
+        logedUser={logedUser}
+        posts={posts}
+        setPosts={setPosts}
+        map={map}
+      />
     </div>
   );
 }
