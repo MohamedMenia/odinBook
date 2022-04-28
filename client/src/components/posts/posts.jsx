@@ -1,10 +1,11 @@
-import './posts.css'
+import "./posts.css";
 import React from "react";
 import { getimg } from "../../functions/getImg";
 import { AiOutlineLike, AiFillLike } from "react-icons/ai";
 import { FaRegCommentAlt } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
-function Posts({ logedUser, posts, setPosts, map=logedUser.map }) {
+function Posts({ logedUser, posts, setPosts, map = logedUser.map }) {
   let handelLikes = async (postID, PostWriterID, likeStates) => {
     let postsCopy = posts.map((post) => {
       if (post._id === postID) {
@@ -20,7 +21,7 @@ function Posts({ logedUser, posts, setPosts, map=logedUser.map }) {
       return post;
     });
     setPosts(postsCopy);
-    await fetch(`/LikeAndUnlike`, {
+    await fetch(`http://localhost:8000/LikeAndUnlike`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ postID, PostWriterID, likeStates }),
@@ -41,7 +42,7 @@ function Posts({ logedUser, posts, setPosts, map=logedUser.map }) {
     setPosts(postsCopy);
     let comment = e.target[0].value;
     e.target[0].value = "";
-    await fetch(`/addComment`, {
+    await fetch(`http://localhost:8000/addComment`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ postID, PostWriterID, comment }),
@@ -58,11 +59,11 @@ function Posts({ logedUser, posts, setPosts, map=logedUser.map }) {
               <img alt="" src={getimg(map[post.PostWriterID])} />
             </div>
             <div className="postsPublisherAndDate">
-              <span>
+              <Link to={`/profile/${map[[post.PostWriterID]].email}`}>
                 {map[post.PostWriterID].firstname +
                   " " +
                   map[post.PostWriterID].surename}
-              </span>
+              </Link>
               <span className="postDate">{post.createdAt}</span>
             </div>
           </div>
@@ -102,12 +103,12 @@ function Posts({ logedUser, posts, setPosts, map=logedUser.map }) {
             {post.comments.map((comment) => (
               <div className="comment" key={comment._id}>
                 <img alt="" src={getimg(map[comment.writerID])} />
-                <div>
-                  <p>
+                <div className="commentWriterAndContent">
+                  <Link to={`/profile/${map[comment.writerID].email}`}>
                     {map[comment.writerID].firstname +
                       " " +
                       map[comment.writerID].surename}
-                  </p>
+                  </Link>
                   <span>{comment.content}</span>
                 </div>
               </div>

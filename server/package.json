@@ -5,11 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "preinstall": "npx npm-force-resolutions",
     "dev":"nodemon -L app.js"
-  },
-  "resolutions": {
-    "ansi-regex": "5.0.1"
   },
   "author": "",
   "license": "ISC",

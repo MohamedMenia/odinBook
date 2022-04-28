@@ -9,7 +9,7 @@ function SearchRes() {
 
   let searchStr = useParams();
   useEffect(() => {
-    fetch(`/search/${searchStr["str"]}`, {
+    fetch(`http://localhost:8000/search/${searchStr["str"]}`, {
       method: "get",
       headers: { "Content-Type": "application/json" },
       credentials: "include",

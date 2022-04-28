@@ -5,7 +5,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { BsLayoutWtf } from "react-icons/bs";
 import { BsSearch } from "react-icons/bs";
 
-function Navbar({ handelSearch, user }) {
+function Navbar({ handelSearch, user,setUser }) {
   const [searchStr, setsearchStr] = useState("");
 
   const navigate = useNavigate();
@@ -14,6 +14,17 @@ function Navbar({ handelSearch, user }) {
     e.preventDefault();
     navigate(`/search/${searchStr}`);
   };
+  let handelLogout = async() => {
+    let res = await fetch("http://localhost:8000/logout/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include"
+    });
+    let result = res.status;
+    if(result===200)setUser(null);
+    else alert("server erorr");
+
+    };
 
   return (
     <nav className="navbar">
@@ -38,7 +49,7 @@ function Navbar({ handelSearch, user }) {
           {user.firstname} {user.surename}
         </Link>
         <Link to="/friends">Friends </Link>
-        <button>Log Out</button>
+        <button onClick={handelLogout}>Log Out</button>
       </div>
     </nav>
   );

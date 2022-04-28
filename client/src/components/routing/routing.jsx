@@ -41,10 +41,10 @@ function Routing() {
       {!isPending && user && (
         <div>
           <BrowserRouter>
-            <Navbar user={user} />
+            <Navbar user={user}setUser={setUser} />
             <div className="flex">
               <Routes>
-                <Route path="/" element={<Home logedUser={user} />} />
+                <Route path="/" element={<Home logedUser={user} setUser={setUser} />} />
                 <Route
                   path="/profileEdit"
                   element={<ProfileEditor user={user} setUser={setUser} />}

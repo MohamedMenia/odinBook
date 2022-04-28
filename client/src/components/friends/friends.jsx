@@ -10,7 +10,7 @@ function Friends() {
 
 
   useEffect(() => {
-    fetch(`/allFriends`, {
+    fetch(`http://localhost:8000/allFriends`, {
       method: "get",
       headers: { "Content-Type": "application/json" },
       credentials: "include",

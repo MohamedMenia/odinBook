@@ -4,7 +4,6 @@ const Friends = require("../models/friendsModel");
 const { post } = require("../routes/route");
 
 module.exports.creatAccountPost = async (req, res) => {
-  //console.log(req.body)
   let user = new User({
     _id: new mongoose.Types.ObjectId(),
     firstname: req.body.firstname,
@@ -244,6 +243,7 @@ module.exports.timelinePosts = async (req, res) => {
     }
     res.status(200).json({ posts, map });
   } catch (err) {
+    res.sendStatus(500);
     console.log(err);
   }
 };

@@ -43,6 +43,17 @@ app.post("/profile", upload.single("avatar"), controller.profileEdit);
 app.post('/addPost',controller.addPost)
 app.post('/LikeAndUnlike',controller.LikeAndUnlike)
 app.post('/addComment',controller.addComment)
+app.post('/logout', function(req, res){
+  try{
+    req.logout();
+    res.sendStatus(200)
+
+  }catch(err){
+    console.log(err)
+    res.sendStatus(500)
+  }
+
+});
 app.get("/timelinePosts", controller.timelinePosts);
 
 

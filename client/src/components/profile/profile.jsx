@@ -31,7 +31,7 @@ function Profile({ logedUser }) {
       setUser(logedUser);
       setIsPending(false);
     } else {
-      fetch(`/profile/${reqEmail["email"]}`, {
+      fetch(`http://localhost:8000/profile/${reqEmail["email"]}`, {
         method: "get",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -56,7 +56,7 @@ function Profile({ logedUser }) {
   let handelFriend = async () => {
     let friendholder = friendStatus.friendStatus;
     setFriendStatus({ friendStatus: "loading" });
-    let res = await fetch("/addFriendREQ", {
+    let res = await fetch("http://localhost:8000/addFriendREQ", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

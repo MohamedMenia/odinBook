@@ -40,7 +40,6 @@ function LoginForm() {
         credentials: "include",
       });
       let result = res.status;
-      console.log(result);
       if (result === 200) {
         myRef.current.setCustomValidity("");
         pop(e);
