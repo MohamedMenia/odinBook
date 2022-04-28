@@ -241,6 +241,7 @@ module.exports.timelinePosts = async (req, res) => {
       posts = [...posts, ...postsholder];
       map = { ...map, ...mapholder };
     }
+    posts.sort((a, b) => b.createdAt - a.createdAt);
     res.status(200).json({ posts, map });
   } catch (err) {
     res.sendStatus(500);

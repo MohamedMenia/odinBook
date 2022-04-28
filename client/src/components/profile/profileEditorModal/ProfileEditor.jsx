@@ -44,7 +44,7 @@ function ProfileEditor({ user, setUser }) {
     if (facebookURL) formData.append("facebookURL", facebookURL);
     if (twitterURL) formData.append("twitterURL", twitterURL);
     if (instgramURL) formData.append("instgramURL", instgramURL);
-    navigate(`profile/${user.email}`);
+    navigate(`/profile/${user.email}`);
     await fetch(`http://localhost:8000/profile`, {
       method: "post",
       credentials: "include",
