@@ -1,0 +1,142 @@
+.Post {
+  display: flex;
+  align-self: center;
+  background-color: #fff;
+  width: clamp(400px, 100vw, 700px);
+  flex-wrap: nowrap;
+  gap: 10px;
+  flex-direction: column;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+}
+
+.Post img {
+  height: 70px;
+  width: 70px;
+  border-radius: 50px;
+  margin: 10px 0px 10px 10px;
+}
+.PostImgPublisher {
+  display: flex;
+  gap: 15px;
+}
+
+.commentInput {
+  width: 90%;
+  border: none;
+  border-radius: 15px;
+  background-color: #ebedf0;
+  height: 35px;
+  outline: none;
+  align-self: center;
+  overflow: hidden;
+}
+.comments {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+.comment {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+}
+.comment > img {
+  height: 40px;
+  width: 40px;
+  border-radius: 40px;
+}
+.comment > div {
+  margin-left: 10px;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  width: 80%;
+  background-color: #ebedf0;
+  border-radius: 15px;
+}
+.comment > div > span {
+  font-size: 0.8rem;
+}
+.comment > div > p {
+  font-size: 1rem;
+}
+.postDate {
+  font-size: 0.8rem;
+  color: #444950;
+}
+.PostImgPublisher a {
+  width: fit-content;
+  text-decoration: none;
+  color: black;
+  border-bottom: 1px solid #fff;
+}
+
+.PostImgPublisher a:visited {
+  color: black;
+  border-bottom: 1px solid #fff;
+}
+.PostImgPublisher a:hover {
+  border-color: black;
+}
+.commentWriterAndContent {
+  display: flex;
+  flex-direction: column;
+}
+.commentWriterAndContent a {
+  text-decoration: none;
+  color: black;
+  width: fit-content;
+  border-bottom: 1px solid #ebedf0;
+}
+.commentWriterAndContent a:visited {
+  color: black;
+  border-bottom: 1px solid #ebedf0;
+}
+.commentWriterAndContent a:hover {
+  border-bottom: 1px solid black;
+}
+#commentsNumber {
+  color: #444950;
+  margin-left: auto;
+}
+
+.likesCommentsNumbers {
+  display: flex;
+}
+
+.likeComment {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  font-size: 1rem;
+  color: #444950;
+  cursor: pointer;
+}
+.likeComment span {
+  padding: 5px;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+}
+.likeComment span:hover {
+  background-color: #dadde1;
+}
+#likesNumber {
+  margin-top: 10px;
+  color: #004c8e;
+}
+.postsPublisherAndDate {
+  display: flex;
+  flex-direction: column;
+  margin-top: 17px;
+  font-size: 1rem;
+}
+.postContent {
+  display: flex;
+  flex-direction: column;
+  margin: 0px 5% 0px;
+}
+hr {
+  border: 1px solid #b8bbbe;
+  width: 100%;
+}

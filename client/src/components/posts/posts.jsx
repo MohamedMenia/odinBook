@@ -1,9 +1,6 @@
 import "./posts.css";
 import React from "react";
-import { getimg } from "../../functions/getImg";
-import { AiOutlineLike, AiFillLike } from "react-icons/ai";
-import { FaRegCommentAlt } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import Post from "./post/post"
 
 function Posts({ logedUser, posts, setPosts, map = logedUser.map }) {
   let handelLikes = async (postID, PostWriterID, likeStates) => {
@@ -53,68 +50,7 @@ function Posts({ logedUser, posts, setPosts, map = logedUser.map }) {
   return (
     <React.Fragment>
       {posts.map((post) => (
-        <div className="Posts" key={post._id}>
-          <div className="PostImgPublisher">
-            <div>
-              <img alt="" src={getimg(map[post.PostWriterID])} />
-            </div>
-            <div className="postsPublisherAndDate">
-              <Link to={`/profile/${map[[post.PostWriterID]].email}`}>
-                {map[post.PostWriterID].firstname +
-                  " " +
-                  map[post.PostWriterID].surename}
-              </Link>
-              <span className="postDate">{post.createdAt}</span>
-            </div>
-          </div>
-          <div className="postContent">
-            <span>{post.content}</span>
-            <span className="likes">
-              <AiFillLike /> {post.likes.length}
-            </span>
-            <hr />
-          </div>
-          <div className="likeComment">
-            <span
-              style={
-                post.likeStates === "Like"
-                  ? { color: "#444950" }
-                  : { color: "#0577db" }
-              }
-              onClick={() =>
-                handelLikes(post._id, post.PostWriterID, post.likeStates)
-              }
-            >
-              <AiOutlineLike /> &nbsp; {post.likeStates}
-            </span>
-            <span>
-              <FaRegCommentAlt /> &nbsp; comment
-            </span>
-          </div>
-          <form
-            className="comments"
-            onSubmit={(e) => handelComments(e, post._id, post.PostWriterID)}
-          >
-            <input
-              className="commentInput"
-              placeholder="  write a comment..."
-              autoComplete="off"
-            />
-            {post.comments.map((comment) => (
-              <div className="comment" key={comment._id}>
-                <img alt="" src={getimg(map[comment.writerID])} />
-                <div className="commentWriterAndContent">
-                  <Link to={`/profile/${map[comment.writerID].email}`}>
-                    {map[comment.writerID].firstname +
-                      " " +
-                      map[comment.writerID].surename}
-                  </Link>
-                  <span>{comment.content}</span>
-                </div>
-              </div>
-            ))}
-          </form>
-        </div>
+        <Post key={post._id} post={post} map={map}handelComments={handelComments}handelLikes={handelLikes} />
       ))}
     </React.Fragment>
   );

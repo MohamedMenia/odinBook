@@ -57,6 +57,7 @@ module.exports.userget = async (req, res) => {
   if (user) {
     let [postsCopy, map] = await handelPosts(user);
     user.posts = [];
+    postsCopy.sort((a, b) => b.createdAt - a.createdAt);
     response = { user, posts: postsCopy, map: map };
     res.json(response);
   } else res.json(404);
@@ -87,6 +88,7 @@ module.exports.people = async (req, res) => {
   } else friend = { friendStatus: "Add Friend" };
   let [posts, map] = await handelPosts(result, req.user);
   result.posts = [];
+  posts.sort((a, b) => b.createdAt - a.createdAt);
   let response = { user: result, posts, friend, map };
 
   res.json(response);

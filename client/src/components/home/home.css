@@ -6,51 +6,6 @@
   flex-direction: column;
   word-break: break-word;
 }
-
-.postsBody img {
-  height: 50px;
-  width: 50px;
-  border-radius: 50px;
-  margin: 10px 0px 10px 10px;
-}
-
-.likeComment {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  font-size: 1rem;
-  color: #444950;
-  cursor: pointer;
-
-}
-.likeComment span {
-  padding: 5px;
-  width: 50%;
-  display: flex;
-  justify-content: center;
-}
-.likeComment span:hover {
-  background-color: #dadde1;
-}
-.likes {
-  margin-top: 10px;
-  color: #004c8e;
-}
-.postsPublisherAndDate {
-  display: flex;
-  flex-direction: column;
-  margin-top: 17px;
-  font-size: 1rem;
-}
-.postContent {
-  display: flex;
-  flex-direction: column;
-  margin: 0px 5% 0px;
-}
-hr {
-  border: 1px solid#b8bbbe;
-  width: 100%;
-}
 .creatPost {
   display: flex;
   flex-direction: column;
